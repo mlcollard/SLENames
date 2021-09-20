@@ -22,6 +22,10 @@ std::string::const_iterator matchName(std::string::const_iterator pos,
         return pos;
     ++curpos;
 
+    /* [a-zA-Z0-9]* */
+    while (curpos != end && isalnum(*curpos))
+        ++curpos;
+
     return curpos;
 }
 
