@@ -18,7 +18,7 @@ std::string::const_iterator matchName(std::string::const_iterator pos,
     auto curpos = pos;
 
     /* [a-zA-Z] */
-    if (!(curpos != end && *curpos == 'a'))
+    if (!(curpos != end && isalpha(*curpos)))
         return pos;
     ++curpos;
 
