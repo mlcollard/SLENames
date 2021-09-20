@@ -12,6 +12,12 @@
 #include <cctype>
 #include <cstring>
 
+std::string::const_iterator matchName(std::string::const_iterator pos,
+                                      std::string::const_iterator end) {
+
+    return pos;
+}
+
 int main(int argc, char* argv[]) {
 
     /* Require filename argument */
@@ -29,8 +35,13 @@ int main(int argc, char* argv[]) {
     /* Output any names */
     std::string::const_iterator pos = s.begin();
     while (pos != s.end()) {
-
-        ++pos;
+        auto startpos = pos;
+        pos = matchName(startpos, s.end());
+        if (pos != startpos) {
+            std::cout << std::string(startpos, pos) << '\n';
+        } else {
+            ++pos;
+        }
     }
 
     return 0;
