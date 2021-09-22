@@ -29,6 +29,28 @@ std::string::const_iterator matchName(std::string::const_iterator pos,
     return curpos;
 }
 
+std::string::const_iterator matchLineComment(std::string::const_iterator pos,
+                                      std::string::const_iterator end) {
+
+    auto curpos = pos;
+
+    /* [/] */
+    if (!(curpos != end && *curpos == '/'))
+        return pos;
+    ++curpos;
+
+    /* [/] */
+    if (!(curpos != end && *curpos == '/'))
+        return pos;
+    ++curpos;
+
+    /* [^\n]* */
+    while (curpos != end && *curpos != '\n')
+            ++curpos;
+
+    return curpos;
+}
+
 std::string::const_iterator matchBlockComment(std::string::const_iterator pos,
                                       std::string::const_iterator end) {
 
@@ -154,9 +176,25 @@ int main(int argc, char* argv[]) {
             }
             break;
         case '/':
-            pos = matchBlockComment(startpos, s.end());
-            if (pos == startpos)
-                ++pos;
+            if (startpos + 1 != s.end()) {
+
+                switch (*(startpos + 1)) {
+                case '*':
+                    pos = matchBlockComment(startpos, s.end());
+                    if (pos == startpos)
+                        ++pos;
+                    break;
+                case '/':
+                    pos = matchLineComment(startpos, s.end());
+                    if (pos == startpos)
+                        ++pos;
+                    break;
+                default:
+                    ++pos;
+                    break;
+                }
+            }
+
             break;
         default:
             ++pos;
